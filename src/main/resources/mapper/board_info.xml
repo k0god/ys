@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.bdi.sb.mapper.BoardInfoMapper">
+	
+	<select id="selectBoardInfoList" resultType="board">
+		select * from board_info
+		<where>
+			<if test='board.biWriter != null and board.biWriter != ""'>
+				and bi_writer like concat('%',#{board.biWriter},'%')
+			</if>
+			<if test='board.biTitle != null and board.biTitle != ""'>
+				and bi_title like concat('%',#{board.biTitle},'%')
+			</if>
+		</where>
+		order by bi_num desc
+		limit #{page.startNum},#{page.pageSize}
+	</select>
+	
+	<select id="selectBoardInfo" resultType="board">
+		select * from board_info where bi_num=#{biNum}
+	</select>
+
+	<insert id="insertBoardInfo">
+		insert into board_info(bi_title, bi_writer, bi_content, bi_file, credat, cretim)
+		values(#{biTitle},#{biWriter},#{biContent},#{biFile},date_format(now(),'%Y%m%d'),date_format(now(),'%H%i%S'))
+	</insert>
+	
+	<update id="updateBoardInfo">
+		update board_info
+		set bi_title=#{biTitle},
+		bi_writer=#{biWriter},
+		bi_content=#{biContent}
+		where bi_num=#{biNum}
+	</update>
+	
+	<delete id="deleteBoardInfo">
+		delete from board_info where bi_num=#{biNum}
+	</delete>
+	
+</mapper>

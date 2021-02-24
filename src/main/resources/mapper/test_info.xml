@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.bdi.sb.mapper.TestInfoMapper">
+	
+	<select id="selectTestInfoList" resultType="test">
+		select * from test_info
+		order by ti_num desc
+		limit #{page.startNum},10
+	</select>
+
+	<select id="selectTestInfo" resultType="test">
+		select * from test_info
+		where ti_num=#{tiNum}
+	</select>
+	<select id="totalTestInfoCount" resultType="int">
+		SELECT COUNT(*) FROM test_info
+	</select>
+	
+	<insert id="insertTestInfo">
+		insert into test_info(ti_name, ti_addr, ti_etc)
+		values(#{tiName},#{tiAddr},#{tiEtc})
+	</insert>
+	
+	<update id="updateTiUpdcnt">
+		update test_info
+		set ti_updcnt = ti_updcnt +1
+		where ti_num=#{tiNum}
+	</update>
+	
+	<update id="updateTestInfo">
+		update test_info
+		<set>
+			<if test='tiName != "" or tiName != null'>
+				ti_name = #{tiName},
+			</if>
+			<if test='tiAddr != "" or tiAddr != null'>
+				ti_addr = #{tiAddr},
+			</if>
+			<if test='tiEtc != "" or tiEtc != null'>
+				ti_etc = #{tiEtc},
+			</if>
+		</set>
+		where ti_num = #{tiNum}
+	</update>
+	
+	<delete id="deleteTestInfo">
+		delete from test_inf where ti_num=#{tiNum}
+	</delete>
+</mapper>
